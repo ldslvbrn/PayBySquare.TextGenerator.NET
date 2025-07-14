@@ -18,8 +18,6 @@ There are different options to consume this library:
 * Download DLL from [Releases](https://github.com/PavlinII/PayBySquare.TextGenerator.NET/releases)
 * Clone this repository into your project as a submodule or just copy it's content as a project reference.
 
-[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=PayBySquare.TextGenerator.NET)](https://sonarcloud.io/dashboard?id=PayBySquare.TextGenerator.NET)
-
 ## Getting started
 
 Library is prepared as .NET Standard 2.0. Code can be easily adjusted to any other project type.
