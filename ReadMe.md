@@ -25,26 +25,54 @@ There are different options to consume this library:
 Library is prepared as .NET Standard 2.0. Code can be easily adjusted to any other project type.
 
 Simple payment:
-```
-Dim Data As New PayBySquareTextGenerator.PayBySquareOverkill("CZ1720100000002800266981", 1235.8D, "EUR", "654321", "PayBySquareOverkill")
-Dim Text As String = Data.GeneratePayBySquareOverkillString
+```cs
+var generator = new PayBySquareTextGenerator.PayBySquareOverkill("CZ1720100000002800266981", 1235.80m, "EUR", "654321", "PayBySquareOverkill");
+var text = generator.GeneratePayBySquareOverkillString();
 ```
 
-Payment can be decorated with other informations
+Payment can be decorated with other informations:
+```cs
+var payment = new Payment
+{
+	Amount = 112.35m,
+	CurrencyCode = "EUR",
+	BankAccounts = new List<BankAccount>
+		{
+			new BankAccount("CZ1720100000002800266981", "FIOBCZPPXXX")
+		},
+	VariableSymbol = "654321",
+	ConstantSymbol = "0308",
+	SpecificSymbol = "998877",
+	PaymentNote = "PayBySquareOverkill note",
+	PaymentDueDate = new DateTime(2019,1,1),
+};
+var generator = new PayBySquareOverkill(payment);
+var text = generator.GeneratePayBySquareOverkillString();
 ```
-Dim Payment As New PayBySquareTextGenerator.Payment
-With Payment
-    .Amount = 112.35
-    .CurrencyCode = "EUR"
-    .BankAccounts.Add(New BankAccount("CZ1720100000002800266981", "FIOBCZPPXXX"))
-    .VariableSymbol = "654321"
-    .ConstantSymbol = "0308"
-    .SpecificSymbol = "998877"
-    .PaymentNote = "PayBySquareOverkill note"
-    .PaymentDueDate = New Date(2019, 1, 1)
-End With
-Dim Data As New PayBySquareTextGenerator.PayBySquareOverkill(Payment)
-Dim Text As String = Data.GeneratePayBySquareOverkillString
+Standing order example:
+```cs
+var paymentDay = DateTime.Today.AddDays(2);
+	
+var payment = new Payment
+{
+	Amount = 112.35m,
+	CurrencyCode = "EUR",
+	BankAccounts = new List<BankAccount>
+	{
+		new BankAccount("CZ1720100000002800266981", "FIOBCZPPXXX")
+	},
+	VariableSymbol = "654321",
+	ConstantSymbol = "0308",
+	SpecificSymbol = "998877",
+	BeneficiaryName = "Beneficiary name",
+	PaymentDueDate = paymentDay,
+	IsStandingOrder = true,
+	Periodicity = Periodicity.Monthly,
+	LastDate = paymentDay.AddMonths(12)
+};
+
+var generator = new PayBySquareOverkill(payment);
+var text = generator.GeneratePayBySquareOverkillString();
 ```
 
 ## Next step?
