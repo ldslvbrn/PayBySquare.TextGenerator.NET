@@ -31,4 +31,28 @@ Public Class PayBySquareOverkillTests
         Assert.AreEqual("000FC000CQQGDBVH80212G6G8MPTRE2S9TNOA5IPVOQB7V525176J4DVMIDEA6P75S6N54TM114GH1N6RF2NQKBMSI92OMEOMQNNVBSF22KQGKNP6UL6NIARGU0MR0M3KN1R3B3UUD5O68NLOJH1R00T16C8TKFS883M4H88NEHKFALKV2QLMMKC6KLQ76CDOG7BPBTUDTA4P018IPEL6M8IEFK4LR6H2HM3HS168E6MQIAG9493RVK23HF4MQ78095R25OLGLL2CORBJJVIF1MH2I08GH71O0", Gen.GeneratePayBySquareOverkillString)
     End Sub
 
+    <TestMethod>
+    Sub StandingOrderTest()
+        Dim Gen As New PayBySquareOverkill, P As Payment
+        Gen.InvoiceID = "X-4242"
+        P = New Payment
+        With P
+            .Amount = 112.35
+            .CurrencyCode = "EUR"
+            .BankAccounts.Add(New BankAccount("CZ1720100000002800266981", "FIOBCZPPXXX"))
+            .VariableSymbol = "654321"
+            .ConstantSymbol = "0308"
+            .SpecificSymbol = "998877"
+            .PaymentNote = "PayBySquareOverkill note"
+            .BeneficiaryName = "Ing. Pavel Mikula"
+            .BeneficiaryAddressLine1 = "AddressOf(Pavel Mikula).FirstLine"
+            .BeneficiaryAddressLine2 = "AddressOf(Pavel Mikula).SecondLine"
+            .PaymentDueDate = New Date(2019, 1, 1)
+            .IsStandingOrder = True
+            .Periodicity = Periodicity.Monthly
+        End With
+        Gen.Payments.Add(P)
+        Assert.AreEqual("000DC000529908IGA8NBL5SUT0722MUDVTGACI2GJJEOE62AFJKS3OO6TIOA72BLTK88A1VEKED1OK38CN71EE36N3BTKN0PIV32U7J9BF3MIH9P46NPF12D61CL04SKASIUUS4ABI0QV2UDACSVPSJFNQGI2KKKL1P66I1G2L632AU1B6F961J8IHRAVSF98B0AI9G80DCKHDVV88A3TT1J9AS1C1UELL2PO8M2FTU97VGJPS9UT3GSJODTLR4323QRMK82OLDLIHEEGVGO0", Gen.GeneratePayBySquareOverkillString)
+    End Sub
+
 End Class

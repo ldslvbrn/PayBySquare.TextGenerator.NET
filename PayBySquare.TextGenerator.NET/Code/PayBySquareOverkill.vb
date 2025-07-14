@@ -1,4 +1,7 @@
 ﻿
+Imports System.ComponentModel
+Imports System.Net
+
 Public Class PayBySquareOverkill
 
     Public InvoiceID As String
@@ -20,22 +23,36 @@ Public Class PayBySquareOverkill
         TS.Append(InvoiceID)
         TS.Append(Payments.Count)
         For Each P As Payment In Payments
-            TS.Append(1)                'PaymentOptions= paymentorder=1, standingorder=2, directdebit=4
+            TS.Append(If(P.IsStandingOrder, 2, 1))  'PaymentOptions= paymentorder=1, standingorder=2, directdebit=4
             TS.Append(P.Amount.ToString.Replace(",", "."))
             TS.Append(P.CurrencyCode)
             TS.Append(P.PaymentDueDate)
             TS.Append(P.VariableSymbol)
             TS.Append(P.ConstantSymbol)
             TS.Append(P.SpecificSymbol)
-            TS.Append(CStr(Nothing))        'OriginatorsReferenceInformation (VS, SS a KS in SEPA format) - only if VS, KS and SS are empty
+            TS.Append(CStr(Nothing))                'OriginatorsReferenceInformation (VS, SS a KS in SEPA format) - only if VS, KS and SS are empty
             TS.Append(If(P.PaymentNote IsNot Nothing AndAlso P.PaymentNote.Length > 140, P.PaymentNote.Substring(0, 140), P.PaymentNote))
             TS.Append(P.BankAccounts.Count)
             For Each BA As BankAccount In P.BankAccounts
                 TS.Append(BA.IBAN)
                 TS.Append(BA.BIC)
             Next
-            TS.Append(0)                    'No StandingOrderExt structure, refer to XSD schema for implementation
-            TS.Append(0)                    'No DirectDebitExt structure, refer to XSD schema for implementation
+            If P.IsStandingOrder Then               'StandingOrderExt structure
+                TS.Append(1)
+                TS.Append(CStr(Nothing))            'Day only used when different from the day in PaymentDueDate
+                'TS.Append(P.StandingOrderDay.Value)
+                TS.Append(CStr(Nothing))            'Month only used when specifiyng selection
+                'If (P.StandingOrderMonth.HasValue) Then
+                '    TS.Append(CInt(Math.Pow(2, P.StandingOrderMonth.Value)))
+                'Else
+                '    TS.Append(0)
+                'End If
+                TS.Append(EncodePeriodicity(P.Periodicity.Value))
+                TS.Append(P.LastDate)
+            Else                                    'No StandingOrderExt structure
+                TS.Append(0)
+            End If
+            TS.Append(0)                            'No DirectDebitExt structure, refer to XSD schema for implementation
             TS.Append(P.BeneficiaryName)
             TS.Append(P.BeneficiaryAddressLine1)
             TS.Append(P.BeneficiaryAddressLine2)
@@ -64,6 +81,29 @@ Public Class PayBySquareOverkill
             sb.Append(Base32HexCharset(CharIndex))
         Next
         Return sb.ToString
+    End Function
+
+    Private Function EncodePeriodicity(Periodicity As Periodicity) As String
+        Dim perStr As String = Nothing
+        Select Case Periodicity
+            Case Periodicity.Daily
+                perStr = "d"
+            Case Periodicity.Weekly
+                perStr = "w"
+            Case Periodicity.Biweekly
+                perStr = "b"
+            Case Periodicity.Monthly
+                perStr = "m"
+            Case Periodicity.Bimonthly
+                perStr = "B"
+            Case Periodicity.Quarterly
+                perStr = "q"
+            Case Periodicity.Semiannually
+                perStr = "s"
+            Case Periodicity.Annually
+                perStr = "a"
+        End Select
+        Return perStr
     End Function
 
 End Class
