@@ -39,9 +39,9 @@ var payment = new Payment
 	Amount = 112.35m,
 	CurrencyCode = "EUR",
 	BankAccounts = new List<BankAccount>
-		{
-			new BankAccount("CZ1720100000002800266981", "FIOBCZPPXXX")
-		},
+	{
+		new BankAccount("CZ1720100000002800266981", "FIOBCZPPXXX")
+	},
 	VariableSymbol = "654321",
 	ConstantSymbol = "0308",
 	SpecificSymbol = "998877",
@@ -54,7 +54,7 @@ var text = generator.GeneratePayBySquareOverkillString();
 Standing order example:
 ```cs
 var paymentDay = DateTime.Today.AddDays(2);
-	
+
 var payment = new Payment
 {
 	Amount = 112.35m,
