@@ -6,12 +6,18 @@ Public Class PayBySquareOverkill
 
     Public InvoiceID As String
     Public Payments As New List(Of Payment)
+    Public Version As Byte = 0               ' 1.0.0 = 0x00 = 0, 1.1.0 = 1 = 0x01
 
     Public Sub New()
     End Sub
 
     Public Sub New(P As Payment)
         Payments.Add(P)
+    End Sub
+
+    Public Sub New(P As Payment, V As Byte)
+        Payments.Add(P)
+        Version = V
     End Sub
 
     Public Sub New(IBAN As String, Amount As Decimal, CurrencyCode As String, VariableSymbol As String, PaymentNote As String)
@@ -59,7 +65,7 @@ Public Class PayBySquareOverkill
         Next
         Value = Text.Encoding.UTF8.GetBytes(TS.ToString) 'TrimEnd tabs
         DataToCompress = Crc.ComputeHash(Value).Concat(Value).ToArray
-        Buff = New Byte() {0, 0}.Concat(BitConverter.GetBytes(CShort(DataToCompress.Length))).Concat(Enc.Encode(DataToCompress)).ToArray    '4x4 bits (Type=0, Version=0, DocumentType=0, Reserved=0) & 16 bit little endian length of DataToCompress (crc & value) & LzmaCompressedData
+        Buff = New Byte() {0, Version}.Concat(BitConverter.GetBytes(CShort(DataToCompress.Length))).Concat(Enc.Encode(DataToCompress)).ToArray    '4x4 bits (Type=0, Version=0, DocumentType=0, Reserved=0) & 16 bit little endian length of DataToCompress (crc & value) & LzmaCompressedData
         Return ToBase32Hex(Buff)
     End Function
 
