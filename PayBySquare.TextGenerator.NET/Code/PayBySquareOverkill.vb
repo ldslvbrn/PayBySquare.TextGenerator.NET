@@ -6,8 +6,7 @@ Public Class PayBySquareOverkill
 
     Public InvoiceID As String
     Public Payments As New List(Of Payment)
-    Public Version As Byte = 0               ' 1.0.0 = 0x00 = 0, 1.1.0 = 1 = 0x01
-
+    Public Version As Byte = 0                      'Note: version of the PAY by square type has not yet changed - schema has
     Public Sub New()
     End Sub
 
