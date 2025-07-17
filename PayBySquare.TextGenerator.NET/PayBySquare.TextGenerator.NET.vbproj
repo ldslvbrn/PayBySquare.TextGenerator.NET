@@ -1,14 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <RootNamespace>PayBySquareTextGenerator</RootNamespace>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <Authors>Ing. Pavel Mikula</Authors>
+	<!--<TargetFramework>netstandard2.0</TargetFramework>-->
+	<TargetFramework>net472</TargetFramework>
+    <Authors>Ing. Pavel Mikula, Ladislav Baran</Authors>
     <Description>This project provides standalone library for Slovak PayBySquare QR payment standard.</Description>
     <Copyright></Copyright>
-    <PackageProjectUrl>https://github.com/PavlinII/PayBySquare.TextGenerator.NET</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/PavlinII/PayBySquare.TextGenerator.NET</RepositoryUrl>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/ldslvbrn/PayBySquare.TextGenerator.NET</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ldslvbrn/PayBySquare.TextGenerator.NET</RepositoryUrl>
     <OptionStrict>On</OptionStrict>
     <OptionInfer>Off</OptionInfer>
     <NoWarn />
